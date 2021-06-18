@@ -22,36 +22,33 @@ import { TasksService } from './tasks.service';
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
-  // @Get()
-  // getTask(@Query(ValidationPipe) filterSearch: GetTasksFillterDto): Task[] {
-  //   if (Object.keys(filterSearch).length) {
-  //     return this.tasksService.getTasksWithFillters(filterSearch);
-  //   } else {
-  //     return this.tasksService.getAllTasks();
-  //   }
-  // }
+  @Get()
+  getTask(
+    @Query(ValidationPipe) filterSearch: GetTasksFillterDto,
+  ): Promise<Task[]> {
+    return this.tasksService.getTasks(filterSearch);
+  }
 
   @Get('/:id')
   getTaskById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
     return this.tasksService.getTaskById(id);
   }
 
-  // @Patch('/:id/status')
-  // updateTask(
-  //   @Param('id') id: string,
-  //   @Body('status', TaskStatusValidationPipe) status: Taskstatus,
-  // ): Task {
-  //   return this.tasksService.updateStatusTask(id, status);
-  // }
+  @Post()
+  @UsePipes(ValidationPipe)
+  createUser(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto);
+  }
+  @Delete('/:id')
+  deleteTaskById(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.tasksService.deleteTask(id);
+  }
 
-  // @Delete('/:id')
-  // deleteTaskById(@Param('id') id: string): void {
-  //   this.tasksService.deleteTask(id);
-  // }
-
-  // @Post()
-  // @UsePipes(ValidationPipe)
-  // createUser(@Body() createTaskDto: CreateTaskDto): Task {
-  //   return this.tasksService.createTask(createTaskDto);
-  // }
+  @Patch('/:id/status')
+  updateTask(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status', TaskStatusValidationPipe) status: Taskstatus,
+  ): Promise<Task> {
+    return this.tasksService.updateStatusTask(id, status);
+  }
 }
