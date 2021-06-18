@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsIn, IsOptional } from 'class-validator';
-import { Taskstatus } from '../task.model';
+import { Taskstatus } from '../task.enum';
 
 export class GetTasksFillterDto {
   @IsOptional()
